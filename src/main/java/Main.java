@@ -4,6 +4,8 @@ public class Main {
 
         Player player = new Player("Wsky",100,5,1,1,0);
         Monster monster = new Monster("Weak Zombie",15,1);
+        Potion hp = new Potion("HP Potion",20,0,0);
+
 
         while (player.getHealth() > 0 && monster.getHealth() > 0) {
             player.attack(monster);
@@ -23,6 +25,10 @@ public class Main {
         }  else if (player.getHealth() <= 0) {
             System.out.println("Player is dead");
         }  else System.out.println("Something went wrong");
+
+
+        hp.heal(player);
+
 
 
     }

@@ -10,6 +10,7 @@ public class Player {
     private int xp;
     private int gold;
     Random rand = new Random();
+    private int fullHP;
 
     // я думаю надо делать пока без инвентаря либо делать еще один конструктор без него
     public Player(String name, int health, int damage, int level, int xp, int gold) {
@@ -20,6 +21,7 @@ public class Player {
         this.level = level;
         this.xp = xp;
         this.gold = gold;
+        this.fullHP = health;
     }
 
     public String getName() {
@@ -77,6 +79,10 @@ public class Player {
     public void setGold(int gold) {
         this.gold = gold;
     }
+
+    public int getFullHP() {return fullHP;}
+
+    public void setFullHP(int fullHP) {this.fullHP = fullHP;}
 
     public void attack(Monster monster) {
 
