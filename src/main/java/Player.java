@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -5,19 +6,22 @@ public class Player {
     private String name;
     private int health;
     private int damage;
-    private List<String> inventory;
+    private List<Item> inventory;
     private int level;
     private int xp;
     private int gold;
-    Random rand = new Random();
     private int fullHP;
 
-    // я думаю надо делать пока без инвентаря либо делать еще один конструктор без него
+    private Weapon equippedWeapon;
+
+    Random rand = new Random();
+
+
     public Player(String name, int health, int damage, int level, int xp, int gold) {
         this.name = name;
         this.health = health;
         this.damage = damage;
-//        this.inventory = inventory;
+        this.inventory = new ArrayList<>();
         this.level = level;
         this.xp = xp;
         this.gold = gold;
@@ -41,20 +45,24 @@ public class Player {
     }
 
     public int getDamage() {
-        return damage + rand.nextInt(5);
+        int damageWithWeapon = 0;
+        if(equippedWeapon !=null) {
+            damageWithWeapon = equippedWeapon.getDamage();
+        }
+        return damage + rand.nextInt(5) + damageWithWeapon;
     }
 
     public void setDamage(int damage) {
         this.damage = damage;
     }
 
-//    public List<String> getInventory() {
-//        return inventory;
-//    }
-//
-//    public void setInventory(List<String> inventory) {
-//        this.inventory = inventory;
-//    }
+    public List<Item> getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(List<Item> inventory) {
+        this.inventory = inventory;
+    }
 
     public int getLevel() {
         return level;
@@ -83,7 +91,7 @@ public class Player {
     public int getFullHP() {return fullHP;}
 
     public void setFullHP(int fullHP) {this.fullHP = fullHP;}
-
+    //атака
     public void attack(Monster monster) {
 
         int finalDamage = getDamage();
@@ -91,5 +99,28 @@ public class Player {
         monster.setHealth(
                 monster.getHealth() - finalDamage
         );
+    }
+
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                ", health=" + health +
+                ", damage=" + damage +
+                ", inventory=" + inventory +
+                ", level=" + level +
+                ", xp=" + xp +
+                ", gold=" + gold +
+                ", rand=" + rand +
+                ", fullHP=" + fullHP +
+                '}';
+    }
+    //оружие
+    public Weapon getEquippedWeapon() {
+        return equippedWeapon;
+    }
+    public void equipWeapon(Weapon weapon){
+        this.equippedWeapon = weapon;
     }
 }

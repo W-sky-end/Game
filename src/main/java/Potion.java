@@ -1,23 +1,17 @@
-public class Potion {
-    private String name;
+public class Potion extends Item {
     private int hp;
     private int mp;
     private int damage;
 
-    public Potion(String name, int hp, int mp, int damage) {
+    public Potion(String name, int hp, int mp, int damage, int id ,int price) {
+        super(id,price,name);
         this.hp = hp;
-        this.name = name;
         this.mp = mp;
         this.damage = damage;
+
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getHp() {
         return hp;
@@ -45,9 +39,9 @@ public class Potion {
 
     @Override
     public String toString() {
-        return "Potion{" +
-                "name='" + name + '\'' +
-                ", hp=" + hp +
+        return super.toString() +
+                "Potion{" +
+                "hp=" + hp +
                 ", mp=" + mp +
                 ", damage=" + damage +
                 '}';
@@ -57,14 +51,7 @@ public class Potion {
 
         int newHealth = player.getHealth() + this.hp;
 
-        if (newHealth > player.getFullHP()) {
-
-            player.setHealth(player.getFullHP());
-
-        } else {
-
-            player.setHealth(newHealth);
-        }
+        player.setHealth(Math.min(newHealth, player.getFullHP()));
 
         System.out.println(
                 "Player "
@@ -74,5 +61,9 @@ public class Potion {
                         + " HP | Current HP: "
                         + player.getHealth()
         );
+    }
+    @Override
+    public String getDisplayName() {
+        return "Potion :" + getName();
     }
 }
