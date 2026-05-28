@@ -2,6 +2,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import dice.Dice;
+import dice.RollResult;
+
 public class Player {
     private String name;
     private int health;
@@ -13,6 +16,7 @@ public class Player {
     private int fullHP;
 
     private Weapon equippedWeapon;
+    private Dice dice = new Dice();
 
     Random rand = new Random();
 
@@ -44,13 +48,6 @@ public class Player {
         this.health = health;
     }
 
-    public int getDamage() {
-        int damageWithWeapon = 0;
-        if(equippedWeapon !=null) {
-            damageWithWeapon = equippedWeapon.getDamage();
-        }
-        return damage + rand.nextInt(5) + damageWithWeapon;
-    }
 
     public void setDamage(int damage) {
         this.damage = damage;
@@ -88,19 +85,48 @@ public class Player {
         this.gold = gold;
     }
 
-    public int getFullHP() {return fullHP;}
+    public int getFullHP() {
+        return fullHP;
+    }
 
-    public void setFullHP(int fullHP) {this.fullHP = fullHP;}
+    public void setFullHP(int fullHP) {
+        this.fullHP = fullHP;
+    }
+
     //атака
+    public int getDamage() {
+        int damageWithWeapon = 0;
+        if (equippedWeapon != null) {
+            damageWithWeapon = equippedWeapon.getDamage();
+        }
+        return damage + rand.nextInt(5) + damageWithWeapon;
+    }
+
     public void attack(Monster monster) {
+        RollResult rollResult = dice.roll();
 
         int finalDamage = getDamage();
 
-        monster.setHealth(
-                monster.getHealth() - finalDamage
-        );
-    }
+        switch (rollResult) {
+            case EXCELLENT -> finalDamage *= 2;
+            case GOOD -> finalDamage += 3;
+            case SATISFACTORY -> finalDamage += 2;
+            case MEDIOCRE -> finalDamage += 0;
+            case POOR -> finalDamage = Math.max(1, finalDamage / 2);
+            case UNSATISFACTORY -> finalDamage = 0;
+        }
 
+        monster.setHealth(
+                monster.getHealth() - finalDamage);
+
+
+        System.out.println(
+                "[" + rollResult + "] " +
+                        "Player " + this.name + " HP|" + this.health + " attacked and take "
+                        + finalDamage + " damages for " + monster.getName()
+        );
+
+    }
 
     @Override
     public String toString() {
@@ -116,11 +142,13 @@ public class Player {
                 ", fullHP=" + fullHP +
                 '}';
     }
+
     //оружие
     public Weapon getEquippedWeapon() {
         return equippedWeapon;
     }
-    public void equipWeapon(Weapon weapon){
+
+    public void equipWeapon(Weapon weapon) {
         this.equippedWeapon = weapon;
     }
 }
