@@ -1,4 +1,4 @@
-package dice;
+package system;
 
 public enum RollResult {
     EXCELLENT,

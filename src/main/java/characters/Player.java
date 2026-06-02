@@ -1,9 +1,13 @@
+package characters;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import dice.Dice;
-import dice.RollResult;
+import system.Dice;
+import system.RollResult;
+import items.Item;
+import items.Weapon;
 
 public class Player {
     private String name;
@@ -119,7 +123,7 @@ public class Player {
         monster.setHealth(
                 monster.getHealth() - finalDamage);
 
-
+        System.out.println(monster.getName() + " attacked " + getName());
         System.out.println(
                 "[" + rollResult + "] " +
                         "Player " + this.name + " HP|" + this.health + " attacked and take "

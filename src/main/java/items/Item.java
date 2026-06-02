@@ -1,3 +1,5 @@
+package items;
+
 public class Item {
     private final int id;
     private int price;

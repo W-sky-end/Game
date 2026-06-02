@@ -1,5 +1,11 @@
-import dice.Dice;
-import dice.RollResult;
+import characters.Monster;
+import characters.Player;
+import system.Dice;
+import factory.MonsterFactory;
+import items.Item;
+import items.Potion;
+import items.Weapon;
+
 
 import java.util.Scanner;
 
@@ -11,7 +17,7 @@ public class Main {
         //объекты
         Dice dice = new Dice();
         Player player = new Player("Wsky", 100, 5, 1, 1, 0);
-        Monster monster = new Monster("Weak Zombie", 15, 1);
+        Monster monster = MonsterFactory.createMonster();
         Potion hp = new Potion("HP Potion", 20, 0, 0, 1, 1);
         Weapon sword = new Weapon(3, "Sword", 21, 1);
 
@@ -49,36 +55,71 @@ public class Main {
                     }
                     if (monster.getHealth() <= 0) {
                         System.out.println("Monster is dead");
+                        monster = MonsterFactory.createMonster();
                     } else if (player.getHealth() <= 0) {
                         System.out.println("Player is dead");
                     } else System.out.println("Something went wrong");
                     break;
                 case 2:
                     System.out.println("\nInventory");
-                    for (Item item : player.getInventory()) {
-                        System.out.println(item.getDisplayName());
+                    for (int i = 0; i < player.getInventory().size(); i++) {
+                        System.out.println(i + "." + player.getInventory().get(i).getDisplayName());
                     }
+
                     System.out.println("\nAny choice ?");
-                    System.out.println("1.Equipped sword");
-                    System.out.println("2.Drink potion");
-                    System.out.println("3.Delete something");
-                    System.out.println("4.Exit");
+                    System.out.println("1.Equipped something");
+                    System.out.println("2.Delete something");
+                    System.out.println("3.Exit");
 
                     int choice2 = sc.nextInt();
+
                     switch (choice2) {
                         case 1:
-                            player.equipWeapon(sword); // мне пока не нравится так как мы не даем выбор какой меч одеть или даже броню
-                            System.out.println("Sword equipped!");
+                            System.out.println("Choose an equipment number (Exc: 0.Sword(3 DMG) peck 0) ");
+                            int inventoryChoice = sc.nextInt();
+
+                            if(inventoryChoice < 0 ||
+                                    inventoryChoice >= player.getInventory().size()) {
+                                System.out.println("Invalid inventory choice");
+                                break;
+                            }
+                            Item selectedItem = player.getInventory().get(inventoryChoice);
+
+                            if(selectedItem instanceof Weapon weapon) {
+                                player.equipWeapon(weapon);
+                                System.out.println(weapon.getName() + " equipped");
+                        }
+                            if(selectedItem instanceof Potion potion) {
+                                potion.heal(player);
+                                player.getInventory().remove(potion);
+                                System.out.println(potion.getName() + " healed");
+                            }
                             break;
                         case 2:
-                            hp.heal(player);
+                            System.out.println("What do ypu want to delete?Choose number.(Exc: 0.Sword(3 DMG) peck 0)");
+                            int inventoryChoice2 = sc.nextInt();
+                            if(inventoryChoice2 < 0 ||
+                                    inventoryChoice2 >= player.getInventory().size()){
+                                System.out.println("Invalid inventory choice");
+                                break;
+                            }
+
+                            Item itemToRemove =
+                                    player.getInventory().get(inventoryChoice2);
+
+                            player.getInventory().remove(itemToRemove);
+
+                            System.out.println(
+                                    itemToRemove.getDisplayName() +
+                                            " removed"
+                            );
+
                             break;
                         case 3:
-                            player.getInventory().remove(sword); // опять же пока что как костыль
-                            break;
-                        case 4:
                             System.out.println("Back to main menu");
                             break;
+                        default:
+                            throw new IllegalStateException("Unexpected value: " + choice2);
                     }
                     continue;
                 case 3:

@@ -1,3 +1,7 @@
+package items;
+
+import characters.Player;
+
 public class Potion extends Item {
     private int hp;
     private int mp;

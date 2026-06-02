@@ -1,4 +1,4 @@
-package dice;
+package system;
 
 import java.util.Random;
 
