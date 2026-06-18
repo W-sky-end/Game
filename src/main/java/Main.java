@@ -16,7 +16,7 @@ public class Main {
 
         //объекты
         Dice dice = new Dice();
-        Player player = new Player("Wsky", 100, 5, 1, 1, 0);
+        Player player = new Player("Wsky", 100, 5, 1, 1, 0,1,1,1);
         Monster monster = MonsterFactory.createMonster();
         Potion hp = new Potion("HP Potion", 20, 0, 0, 1, 1);
         Weapon sword = new Weapon(3, "Sword", 21, 1);
@@ -32,7 +32,8 @@ public class Main {
 
             System.out.println("\n1.Battle");
             System.out.println("2.Inventory");
-            System.out.println("3.Exit");
+            System.out.println("3.INFO");
+            System.out.println("4.Exit");
 
             System.out.println("\nPlease enter your choice : ");
 
@@ -55,6 +56,11 @@ public class Main {
                     }
                     if (monster.getHealth() <= 0) {
                         System.out.println("Monster is dead");
+
+                        player.setXp(player.getXp() + monster.getXpReward());
+                        player.setGold(player.getGold() + monster.getGoldReward());
+                        player.checkingLevel();
+
                         monster = MonsterFactory.createMonster();
                     } else if (player.getHealth() <= 0) {
                         System.out.println("Player is dead");
@@ -65,6 +71,7 @@ public class Main {
                     for (int i = 0; i < player.getInventory().size(); i++) {
                         System.out.println(i + "." + player.getInventory().get(i).getDisplayName());
                     }
+                    System.out.println("Gold :" + player.getGold());
 
                     System.out.println("\nAny choice ?");
                     System.out.println("1.Equipped something");
@@ -75,31 +82,31 @@ public class Main {
 
                     switch (choice2) {
                         case 1:
-                            System.out.println("Choose an equipment number (Exc: 0.Sword(3 DMG) peck 0) ");
+                            System.out.println("Choose an equipment number (Exe: 0.Sword(3 DMG) peck 0) ");
                             int inventoryChoice = sc.nextInt();
 
-                            if(inventoryChoice < 0 ||
+                            if (inventoryChoice < 0 ||
                                     inventoryChoice >= player.getInventory().size()) {
                                 System.out.println("Invalid inventory choice");
                                 break;
                             }
                             Item selectedItem = player.getInventory().get(inventoryChoice);
 
-                            if(selectedItem instanceof Weapon weapon) {
+                            if (selectedItem instanceof Weapon weapon) {
                                 player.equipWeapon(weapon);
                                 System.out.println(weapon.getName() + " equipped");
-                        }
-                            if(selectedItem instanceof Potion potion) {
+                            }
+                            if (selectedItem instanceof Potion potion) {
                                 potion.heal(player);
                                 player.getInventory().remove(potion);
                                 System.out.println(potion.getName() + " healed");
                             }
                             break;
                         case 2:
-                            System.out.println("What do ypu want to delete?Choose number.(Exc: 0.Sword(3 DMG) peck 0)");
+                            System.out.println("What do ypu want to delete?Choose number.(Exe: 0.Sword(3 DMG) peck 0)");
                             int inventoryChoice2 = sc.nextInt();
-                            if(inventoryChoice2 < 0 ||
-                                    inventoryChoice2 >= player.getInventory().size()){
+                            if (inventoryChoice2 < 0 ||
+                                    inventoryChoice2 >= player.getInventory().size()) {
                                 System.out.println("Invalid inventory choice");
                                 break;
                             }
@@ -123,13 +130,19 @@ public class Main {
                     }
                     continue;
                 case 3:
+                    System.out.println("INFO");
+                    System.out.println("LVL: " + player.getLevel() + "\nExp: " + player.getXp() + "\nSTR: " + player.getStrength()
+                                    + "\nAGI: " + player.getAgility() + "\nVIT: " + player.getVitality() + "\n\nStat Points: " + player.getStatPoints()
+                            + "\n"
+
+                            );
+                    break;
+                case 4:
                     System.out.println("Goodbye");
                     gameRunning = false;
                     sc.close();
                     break;
             }
         }
-
-
     }
 }

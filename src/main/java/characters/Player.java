@@ -12,12 +12,15 @@ import items.Weapon;
 public class Player {
     private String name;
     private int health;
-    private int damage;
     private List<Item> inventory;
     private int level;
     private int xp;
     private int gold;
     private int fullHP;
+    private int strength;
+    private int agility;
+    private int vitality;
+    private int statPoints;
 
     private Weapon equippedWeapon;
     private Dice dice = new Dice();
@@ -25,15 +28,18 @@ public class Player {
     Random rand = new Random();
 
 
-    public Player(String name, int health, int damage, int level, int xp, int gold) {
+    public Player(String name, int health, int level, int xp, int gold,int strength, int agility, int vitality, int statPoints) {
         this.name = name;
         this.health = health;
-        this.damage = damage;
         this.inventory = new ArrayList<>();
         this.level = level;
         this.xp = xp;
         this.gold = gold;
         this.fullHP = health;
+        this.strength = strength;
+        this.agility = agility;
+        this.vitality = vitality;
+        this.statPoints = statPoints;
     }
 
     public String getName() {
@@ -52,10 +58,6 @@ public class Player {
         this.health = health;
     }
 
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
 
     public List<Item> getInventory() {
         return inventory;
@@ -97,13 +99,21 @@ public class Player {
         this.fullHP = fullHP;
     }
 
+    public int getStrength() {return strength;}
+
+    public int getAgility() {return agility;}
+
+    public int getVitality() {return vitality;}
+
+    public int getStatPoints() {return statPoints;}
+
     //атака
     public int getDamage() {
         int damageWithWeapon = 0;
         if (equippedWeapon != null) {
             damageWithWeapon = equippedWeapon.getDamage();
         }
-        return damage + rand.nextInt(5) + damageWithWeapon;
+        return strength + rand.nextInt(5) + damageWithWeapon;
     }
 
     public void attack(Monster monster) {
@@ -137,15 +147,20 @@ public class Player {
         return "Player{" +
                 "name='" + name + '\'' +
                 ", health=" + health +
-                ", damage=" + damage +
                 ", inventory=" + inventory +
                 ", level=" + level +
                 ", xp=" + xp +
                 ", gold=" + gold +
-                ", rand=" + rand +
                 ", fullHP=" + fullHP +
+                ", strength=" + strength +
+                ", agility=" + agility +
+                ", vitality=" + vitality +
+                ", equippedWeapon=" + equippedWeapon +
+                ", dice=" + dice +
+                ", rand=" + rand +
                 '}';
-    }
+
+}
 
     //оружие
     public Weapon getEquippedWeapon() {
@@ -154,5 +169,19 @@ public class Player {
 
     public void equipWeapon(Weapon weapon) {
         this.equippedWeapon = weapon;
+    }
+    //уровни
+    public void lvlUp (){
+        level++;
+    }
+    public void checkingLevel(){
+        if(xp >= 100){
+            level++;
+            xp = -100;
+            fullHP += 10;
+            statPoints += 3;
+
+            System.out.println("LevelUP : " + level + " | Stat Points : " + statPoints);
+        }
     }
 }
